@@ -69,7 +69,7 @@ export const Home = () =>
       setTimeout(() =>
       {
         setIsHeartFull(false);
-      }, 1000);
+      }, 250);
     } catch (error)
     {
       console.log('error filling your heart :(', error);
