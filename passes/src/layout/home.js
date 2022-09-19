@@ -17,6 +17,7 @@ export const Home = () =>
     {
       const results = await fetch(`/api/v1/like/${ likeId }/count`, { method: 'GET' })
         .then((response) => response);
+      console.log('results', results);
       // the response was not giving me back data yet, and didn't have enough time to attack this fully
       // so set a mock value here for now
       setLikeCount(20000);
