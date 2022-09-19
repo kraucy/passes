@@ -34,12 +34,12 @@ export const Home = () =>
       const userHasLiked = await fetch(`/api/v1/like/${ likeId }/user/${ userId }`, { method: 'GET' });
       if (userHasLiked)
       {
-        const removedLikeResult = await fetch(`/api/v1/like/add`)
+        const removedLikeResult = await fetch(`/api/v1/like/remove`, { method: 'POST' })
           .then((response) => response);
         return removedLikeResult;
       } else
       {
-        const addLikeResult = await fetch(`/api/v1/like/add`)
+        const addLikeResult = await fetch(`/api/v1/like/add`, { method: 'POST' })
           .then((response) => response);
         return addLikeResult;
       }
