@@ -76,6 +76,21 @@ export const Home = () =>
     }
   };
 
+  const debounce = (func, timeout = 1000) =>
+  {
+    let timer;
+    return (...args) =>
+    {
+      clearTimeout(timer);
+      timer = setTimeout(() =>
+      {
+        func.apply(this, args);
+      }, timeout);
+    };
+  };
+
+  const debounceClick = debounce(() => handleButtonClick());
+
   useEffect(() =>
   {
     // Fetch initial like count here:
@@ -93,7 +108,7 @@ export const Home = () =>
       flexDirection: 'row',
       justifyContent: 'center',
     } }>
-      <HeartButton fillColor={ isHeartFull ? 'red' : undefined } onClick={ handleButtonClick } />
+      <HeartButton fillColor={ isHeartFull ? 'red' : undefined } onClick={ debounceClick } />
       { likeCount > 0 &&
         <Likes numOfLikes={ likeCount } />
       }
