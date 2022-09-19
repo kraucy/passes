@@ -3,8 +3,8 @@ import { HeartButton } from '../components/HeartButton';
 import { Likes } from '../components/Likes';
 import '../App.css';
 
-const likeId = 123;
-const userId = 456;
+const mockLikeId = 1;
+const mockUserId = 1;
 
 export const Home = () =>
 {
@@ -15,13 +15,10 @@ export const Home = () =>
   {
     try
     {
-      const results = await fetch(`/api/v1/like/${ likeId }/count`, { method: 'GET' })
-        .then((response) => response)
-        .then((data) => console.log(data));
-      console.log('results', results);
-      // the response was not giving me back data yet, and didn't have enough time to attack this fully
-      // so set a mock value here for now
-      setLikeCount(20000);
+      const { data } = await fetch(`http://localhost:3001/api/v1/like/${ likeId }/count`, { medhot: 'GET' })
+        .then((response) => response.json())
+        .then((data) => data);
+      setLikeCount(data);
     } catch (error)
     {
       console.log('error', error);
@@ -32,10 +29,12 @@ export const Home = () =>
   {
     try
     {
-      const userHasLiked = await fetch(`/api/v1/like/${ likeId }/user/${ userId }`, { method: 'GET' });
-      if (userHasLiked)
+      const { data } = await fetch(`http://localhost:3001/api/v1/like/${ likeId }/user/${ userId }`, { method: 'GET' })
+        .then((response) => response.json())
+        .then((data) => data);
+      if (data)
       {
-        const removedLikeResult = await fetch(`/api/v1/like/remove`, {
+        const removedLikeResult = await fetch(`http://localhost:3001/api/v1/like/remove`, {
           method: 'POST', body: JSON.stringify({
             likeId, userId
           })
@@ -44,27 +43,29 @@ export const Home = () =>
         return removedLikeResult;
       } else
       {
-        const addLikeResult = await fetch(`/api/v1/like/add`, {
+        const { data } = await fetch(`http://localhost:3001/api/v1/like/add`, {
           method: 'POST', body: JSON.stringify({
             likeId, userId
           })
         })
           .then((response) => response);
-        return addLikeResult;
+        return data;
       }
     } catch (error)
     {
       console.log('error updating like count', error);
+    } finally
+    {
+      fetchLikeCount({ likeId });
     }
   };
 
-  const handleButtonClick = () =>
+  const handleButtonClick = async () =>
   {
     try
     {
-      updateLikeCount({ likeId, userId });
+      await updateLikeCount({ likeId: mockLikeId, userId: mockUserId });
       setIsHeartFull(true);
-      console.log('clicked');
       setTimeout(() =>
       {
         setIsHeartFull(false);
@@ -77,11 +78,12 @@ export const Home = () =>
 
   useEffect(() =>
   {
-    // JSON api resonse here
-    if (!likeCount)
+    // Fetch initial like count here:
+    (async () =>
     {
-      fetchLikeCount({ likeId });
-    }
+      await fetchLikeCount({ likeId: 1 });
+    })();
+
   }, [ likeCount ]);
 
   return (

@@ -3,7 +3,6 @@ import { HeartIcon } from '../assets/HeartIcon';
 
 export const HeartButton = ({ fillColor, onClick }) =>
 {
-
   return (
     <button onClick={ onClick } style={ {
       background: 'none',
