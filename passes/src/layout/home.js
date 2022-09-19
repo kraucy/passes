@@ -10,6 +10,7 @@ export const Home = () =>
 {
   const [ isHeartFull, setIsHeartFull ] = useState(null);
   const [ likeCount, setLikeCount ] = useState(null);
+  const [ showAnimation, setShowAnimation ] = useState(null);
 
   const fetchLikeCount = async ({ likeId }) =>
   {
@@ -40,6 +41,8 @@ export const Home = () =>
           })
         })
           .then((response) => response);
+        setIsHeartFull(false);
+        setShowAnimation(false);
         return removedLikeResult;
       } else
       {
@@ -49,6 +52,8 @@ export const Home = () =>
           })
         })
           .then((response) => response);
+        setIsHeartFull(true);
+        setShowAnimation(true);
         return data;
       }
     } catch (error)
@@ -65,11 +70,6 @@ export const Home = () =>
     try
     {
       await updateLikeCount({ likeId: mockLikeId, userId: mockUserId });
-      setIsHeartFull(true);
-      setTimeout(() =>
-      {
-        setIsHeartFull(false);
-      }, 250);
     } catch (error)
     {
       console.log('error filling your heart :(', error);
@@ -107,8 +107,10 @@ export const Home = () =>
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'center',
+      margin: 'auto',
+      width: '400px'
     } }>
-      <HeartButton fillColor={ isHeartFull ? 'red' : undefined } onClick={ debounceClick } />
+      <HeartButton fillColor={ isHeartFull ? 'red' : undefined } isClicked={ showAnimation } onClick={ debounceClick } />
       { likeCount > 0 &&
         <Likes numOfLikes={ likeCount } />
       }

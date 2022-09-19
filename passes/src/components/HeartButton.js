@@ -1,7 +1,8 @@
+import clsx from 'clsx';
 import React from 'react';
 import { HeartIcon } from '../assets/HeartIcon';
 
-export const HeartButton = ({ fillColor, onClick }) =>
+export const HeartButton = ({ fillColor, isClicked, onClick }) =>
 {
   return (
     <button onClick={ onClick } style={ {
@@ -13,9 +14,11 @@ export const HeartButton = ({ fillColor, onClick }) =>
       cursor: 'pointer',
       outline: 'inherit',
     } }>
-      <HeartIcon alt="heart icon" fillColor={
-        fillColor
+      <HeartIcon alt="heart icon" className={ clsx("heart", {
+        "is_animating": isClicked
+      })
       }
+        fillColor={ fillColor }
       />
     </button>
   );

@@ -18,7 +18,7 @@ export const Likes = ({ numOfLikes }) =>
 
   return (
     <div style={ {
-      fontSize: '14px',
+      fontSize: '18px',
       marginLeft: '5px',
       marginBottom: '5px'
     } }>{ formatNumOfLikes({ likes: numOfLikes }) }</div>
