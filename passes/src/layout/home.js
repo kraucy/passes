@@ -69,7 +69,7 @@ export const Home = () =>
   useEffect(() =>
   {
     // JSON api resonse here
-    fetchLikeCount({ id: 123 });
+    fetchLikeCount({ likeId });
   }, []);
   return (
     <div style={ {
