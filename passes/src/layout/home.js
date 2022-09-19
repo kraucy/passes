@@ -16,7 +16,8 @@ export const Home = () =>
     try
     {
       const results = await fetch(`/api/v1/like/${ likeId }/count`, { method: 'GET' })
-        .then((response) => response);
+        .then((response) => response)
+        .then((data) => console.log(data));
       console.log('results', results);
       // the response was not giving me back data yet, and didn't have enough time to attack this fully
       // so set a mock value here for now
@@ -34,12 +35,20 @@ export const Home = () =>
       const userHasLiked = await fetch(`/api/v1/like/${ likeId }/user/${ userId }`, { method: 'GET' });
       if (userHasLiked)
       {
-        const removedLikeResult = await fetch(`/api/v1/like/remove`, { method: 'POST' })
+        const removedLikeResult = await fetch(`/api/v1/like/remove`, {
+          method: 'POST', body: JSON.stringify({
+            likeId, userId
+          })
+        })
           .then((response) => response);
         return removedLikeResult;
       } else
       {
-        const addLikeResult = await fetch(`/api/v1/like/add`, { method: 'POST' })
+        const addLikeResult = await fetch(`/api/v1/like/add`, {
+          method: 'POST', body: JSON.stringify({
+            likeId, userId
+          })
+        })
           .then((response) => response);
         return addLikeResult;
       }
@@ -69,8 +78,12 @@ export const Home = () =>
   useEffect(() =>
   {
     // JSON api resonse here
-    fetchLikeCount({ likeId });
-  }, []);
+    if (!likeCount)
+    {
+      fetchLikeCount({ likeId });
+    }
+  }, [ likeCount ]);
+
   return (
     <div style={ {
       alignItems: 'center',
@@ -78,7 +91,7 @@ export const Home = () =>
       flexDirection: 'row',
       justifyContent: 'center',
     } }>
-      <HeartButton fillColor={ isHeartFull && 'red' } onClick={ handleButtonClick } />
+      <HeartButton fillColor={ isHeartFull ? 'red' : undefined } onClick={ handleButtonClick } />
       { likeCount > 0 &&
         <Likes numOfLikes={ likeCount } />
       }
